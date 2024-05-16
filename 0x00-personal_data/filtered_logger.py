@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 """
-Regex-ing
+Handling Personal Data
 """
 import os
-from typing import List, ByteString
+from typing import List
 import re
 import logging
 import mysql.connector
-import bcrypt
+
 
 PII_FIELDS = ("name", "email", "phone", "ssn", "password")
 
@@ -57,7 +57,7 @@ def get_logger() -> logging.Logger:
     return logger
 
 
-def get_db() -> mysql.connector.connection.MYSQLConnection:
+def get_db() -> mysql.connector.connection.MySQLConnection:
     """Connects to database"""
     connection = mysql.connector.connect(
         user=os.getenv("PERSONAL_DATA_DB_USERNAME", "root"),
