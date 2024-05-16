@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-"""Regex-ing
+"""
+Regex-ing
 """
 import os
 from typing import List, ByteString
@@ -20,10 +21,12 @@ class RedactingFormatter(logging.Formatter):
     SEPARATOR = ";"
 
     def __init__(self, fields: List[str]):
+        """Initializes an instances of the class"""
         super(RedactingFormatter, self).__init__(self.FORMAT)
         self.fields = fields
 
     def format(self, record: logging.LogRecord) -> str:
+        """Handles formatting"""
         message = super().format(record)
         return self.filter_datum(self.fields, self.REDACTION,
                                  message, self.SEPARATOR)
