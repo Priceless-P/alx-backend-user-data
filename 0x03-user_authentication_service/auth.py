@@ -10,13 +10,15 @@ from uuid import uuid4
 
 def _hash_password(password: str) -> bytes:
     """Hashes password"""
-    password_bytes = password.encode("utf-8")
-    return bcrypt.hashpw(password_bytes, bcrypt.gensalt())
+    password_bytes = password.encode()
+    hash_ = bcrypt.hashpw(password_bytes, bcrypt.gensalt())
+    return hash_
 
 
 def _generate_uuid() -> str:
     """Generates a UUID"""
-    return str(uuid4())
+    UUID = uuid4()
+    return str(UUID)
 
 
 class Auth:
