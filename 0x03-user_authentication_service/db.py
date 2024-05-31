@@ -57,7 +57,7 @@ class DB:
 
         return user
 
-    def update_user(self, user_id: str, **kwargs) -> None:
+    def update_user(self, user_id: int, **kwargs) -> None:
         """"Updates a user"""
         columns = User.__table__.columns.keys()
         for key in kwargs.keys():

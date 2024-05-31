@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Authentication module
 """
+from typing import Union
 import bcrypt
 from db import DB
 from user import User
@@ -59,7 +60,7 @@ class Auth:
         except NoResultFound:
             return None
 
-    def get_user_from_session_id(self, session_id: str) -> User | None:
+    def get_user_from_session_id(self, session_id: str) -> Union[User, None]:
         """Gets a User by session_id"""
         try:
             user = self._db.find_user_by(session_id=session_id)
