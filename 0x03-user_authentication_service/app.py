@@ -52,15 +52,16 @@ def login():
 @app.route("/sessions", methods=["DELETE"])
 def logout():
     """Logs out a user"""
-    try:
-        session_id = request.cookies.get("session_id")
-    except KeyError:
+    session_id = request.cookies.get("session_id", None)
+    if session_id is None:
         abort(403)
 
     user = AUTH.get_user_from_session_id(session_id)
     if user:
         AUTH.destroy_session(user.id)
-        return redirect("/", 302)
+        return redirect("/")
+    else:
+        abort(403)
 
 
 @app.route("/profile", methods=["GET"])
