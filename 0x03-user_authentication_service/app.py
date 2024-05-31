@@ -60,7 +60,7 @@ def logout():
     user = AUTH.get_user_from_session_id(session_id)
     if user:
         AUTH.destroy_session(user.id)
-        return redirect("/", 403)
+        return redirect("/", 302)
 
 
 @app.route("/profile", methods=["GET"])
@@ -68,6 +68,8 @@ def profile():
     """Gets a user's profile information"""
     try:
         session_id = request.cookies.get("session_id")
+        if session_id is None:
+            abort(403)
     except KeyError:
         abort(403)
     user = AUTH.get_user_from_session_id(session_id)
@@ -77,7 +79,7 @@ def profile():
         abort(403)
 
 
-@app.route("/reset-password", methods=["POST"])
+@app.route("/reset_password", methods=["POST"])
 def get_reset_password_token():
     """Endpoint to reset user's password"""
     try:
@@ -88,7 +90,7 @@ def get_reset_password_token():
         reset_token = AUTH.get_reset_password_token(email)
     except ValueError:
         abort(403)
-    return jsonify({"email": email, "reset_token": reset_token})
+    return jsonify({"email": email, "reset_token": reset_token}), 200
 
 
 @app.route("/reset_password", methods=["PUT"])
@@ -99,13 +101,14 @@ def update_password():
         reset_token = request.form["reset_token"]
         new_password = request.form["new_password"]
     except KeyError:
-        abort(403)
-    user_reset_token = AUTH.get_reset_password_token(email)
-    if user_reset_token == reset_token:
+        abort(400)
+
+    try:
         AUTH.update_password(reset_token, new_password)
-        return jsonify({"email": email, "message": "Password updated"})
-    else:
+    except ValueError:
         abort(403)
+
+    return jsonify({"email": email, "message": "Password updated"}), 200
 
 
 if __name__ == "__main__":
